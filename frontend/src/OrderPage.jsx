@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './OrderPage.css';
 
-const OrderPage = ({ product, onBack }) => {
+const OrderPage = ({ product }) => {
   const [quantity, setQuantity] = useState(1);
   const [selectedColor, setSelectedColor] = useState(
     product && product.color && product.color.length > 0 ? product.color[0].hex : null
@@ -20,7 +20,6 @@ const OrderPage = ({ product, onBack }) => {
 
   return (
     <div className="product-page-container">
-      <button onClick={onBack} style={{ marginBottom: '20px', padding: '8px 16px', cursor: 'pointer', border: '1px solid #ccc', borderRadius: '4px', background: '#f8fafc' }}>← Back to Slide Show</button>
       <div className="product-grid">
 
         {/* Left Side: Product Images */}
@@ -132,7 +131,7 @@ const OrderPage = ({ product, onBack }) => {
               <button onClick={() => setQuantity(quantity + 1)}>+</button>
             </div>
             <button className="add-to-cart-btn">
-              <span className="icon">🛒</span> Add to Cart
+              Add to Cart
             </button>
             <button className="wishlist-btn">♡</button>
           </div>
