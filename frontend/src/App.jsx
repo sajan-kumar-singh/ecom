@@ -13,6 +13,7 @@ import img9 from './assets/deadpool_2_movie_funny-wallpaper-1920x1080.jpg'
 
 import OrderPage from './OrderPage'
 import CartPage from './CartPage'
+import ProfilePage from './ProfilePage'
 
 const products = [
   {
@@ -122,15 +123,48 @@ function App() {
     { product: products[4], quantity: 1 }
   ])
   const [isCartPage, setIsCartPage] = useState(false)
+  const [isProfilePage, setIsProfilePage] = useState(false)
+
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpValues, setOtpValues] = useState(['', '', '', '']);
+
+  const handlePhoneChange = (e) => {
+    const val = e.target.value.replace(/\D/g, '');
+    if (val.length <= 10) setPhoneNumber(val);
+  };
+
+  const handleGetOTP = () => {
+    setOtpSent(true);
+  };
+
+  const handleOtpChange = (index, value) => {
+    const val = value.replace(/\D/g, '');
+    if (val.length > 1) return;
+    const newOtp = [...otpValues];
+    newOtp[index] = val;
+    setOtpValues(newOtp);
+    if (val && index < 3) {
+      document.getElementById(`otp-input-${index + 1}`).focus();
+    }
+  };
 
   useEffect(() => {
     const handlePopState = () => {
       const path = window.location.pathname;
       if (path === '/cart') {
         setIsCartPage(true);
+        setIsProfilePage(false);
+        setSelectedProduct(null);
+      } else if (path === '/profile') {
+        setIsCartPage(false);
+        setIsProfilePage(true);
         setSelectedProduct(null);
       } else {
         setIsCartPage(false);
+        setIsProfilePage(false);
         const match = path.match(/^\/order\/(.+)$/);
         if (match) {
           const id = match[1];
@@ -161,7 +195,7 @@ function App() {
   };
 
   useEffect(() => {
-    if (selectedProduct || isCartPage) return;
+    if (selectedProduct || isCartPage || isProfilePage) return;
 
     const interval = setInterval(() => {
       setCurrentProductIndex((prev) => (prev + 1) % products.length);
@@ -216,7 +250,46 @@ function App() {
               </span>
             )}
           </div>
-          <span style={{ cursor: 'pointer', fontSize: '20px' }} title="Profile">👤</span>
+          <div style={{ position: 'relative' }}>
+            <span 
+              style={{ cursor: 'pointer', fontSize: '20px' }} 
+              title="Profile"
+              onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+            >
+              👤
+            </span>
+            {showProfileDropdown && (
+              <div style={{
+                position: 'absolute', top: '35px', right: '0', background: 'white', border: '1px solid #eaeaea', 
+                borderRadius: '8px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', width: '150px', zIndex: 1001,
+                overflow: 'hidden'
+              }}>
+                <div 
+                  style={{ padding: '12px 15px', borderBottom: '1px solid #f0f0f0', color: '#333', fontWeight: '500', cursor: 'pointer' }}
+                  onClick={() => {
+                    setShowProfileDropdown(false);
+                    window.history.pushState({}, '', '/profile');
+                    window.dispatchEvent(new PopStateEvent('popstate'));
+                  }}
+                  onMouseEnter={e => e.target.style.backgroundColor = '#f8fafc'}
+                  onMouseLeave={e => e.target.style.backgroundColor = 'transparent'}
+                >
+                  Sajan
+                </div>
+                <div 
+                  style={{ padding: '12px 15px', cursor: 'pointer', color: '#2563eb', fontWeight: '500' }}
+                  onClick={() => {
+                    setShowProfileDropdown(false);
+                    setShowLoginModal(true);
+                  }}
+                  onMouseEnter={e => e.target.style.backgroundColor = '#f8fafc'}
+                  onMouseLeave={e => e.target.style.backgroundColor = 'transparent'}
+                >
+                  Login
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
@@ -224,6 +297,8 @@ function App() {
       <main style={{ flex: 1, width: '100%', paddingTop: '80px', display: 'flex', flexDirection: 'column' }}>
         {isCartPage ? (
           <CartPage cart={cart} setCart={setCart} />
+        ) : isProfilePage ? (
+          <ProfilePage />
         ) : selectedProduct ? (
           <OrderPage product={selectedProduct} onAddToCart={handleAddToCart} />
         ) : (
@@ -312,6 +387,115 @@ function App() {
         </div>
       </footer>
 
+      {/* Login Modal */}
+      {showLoginModal && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', 
+          backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 2000, display: 'flex', 
+          justifyContent: 'center', alignItems: 'center'
+        }}>
+          <div style={{
+            background: 'white', padding: '30px', borderRadius: '12px', width: '90%', maxWidth: '400px',
+            boxShadow: '0 10px 25px rgba(0,0,0,0.2)', position: 'relative'
+          }}>
+            <button 
+              onClick={() => {
+                setShowLoginModal(false);
+                setOtpSent(false);
+                setPhoneNumber('');
+                setOtpValues(['', '', '', '']);
+              }}
+              style={{
+                position: 'absolute', top: '15px', right: '15px', background: 'none', border: 'none', 
+                fontSize: '20px', cursor: 'pointer', color: '#888'
+              }}
+            >
+              ✕
+            </button>
+            <h2 style={{ margin: '0 0 20px', fontSize: '24px', color: '#111' }}>Login</h2>
+            
+            <div style={{ marginBottom: '20px' }}>
+              <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', color: '#555', fontWeight: '500' }}>
+                Phone Number
+              </label>
+              <div style={{ display: 'flex', border: '1px solid #ccc', borderRadius: '8px', overflow: 'hidden' }}>
+                <span style={{ padding: '12px 15px', background: '#f9f9f9', borderRight: '1px solid #ccc', color: '#555' }}>+91</span>
+                <input 
+                  type="tel" 
+                  placeholder="Enter 10 digit number"
+                  value={phoneNumber}
+                  onChange={handlePhoneChange}
+                  disabled={otpSent}
+                  style={{ border: 'none', padding: '12px', flex: 1, outline: 'none', fontSize: '16px' }}
+                />
+              </div>
+            </div>
+
+            {!otpSent ? (
+              <button 
+                disabled={phoneNumber.length !== 10}
+                onClick={handleGetOTP}
+                style={{
+                  width: '100%', padding: '14px', borderRadius: '8px', border: 'none', fontSize: '16px', fontWeight: '600',
+                  background: phoneNumber.length === 10 ? '#2563eb' : '#cbd5e1', 
+                  color: 'white', cursor: phoneNumber.length === 10 ? 'pointer' : 'not-allowed',
+                  transition: 'background 0.3s'
+                }}
+              >
+                Get OTP
+              </button>
+            ) : (
+              <>
+                <div style={{ marginBottom: '20px' }}>
+                  <label style={{ display: 'block', marginBottom: '12px', fontSize: '14px', color: '#555', fontWeight: '500', textAlign: 'center' }}>
+                    Enter 4-digit OTP
+                  </label>
+                  <div style={{ display: 'flex', justifyContent: 'center', gap: '15px' }}>
+                    {otpValues.map((val, idx) => (
+                      <input
+                        key={idx}
+                        id={`otp-input-${idx}`}
+                        type="text"
+                        maxLength={1}
+                        value={val}
+                        onChange={(e) => handleOtpChange(idx, e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Backspace' && !val && idx > 0) {
+                            document.getElementById(`otp-input-${idx - 1}`).focus();
+                          }
+                        }}
+                        style={{
+                          width: '45px', height: '50px', fontSize: '24px', textAlign: 'center', border: '1px solid #ccc', 
+                          borderRadius: '8px', outline: 'none', transition: 'border-color 0.2s'
+                        }}
+                        onFocus={e => e.target.style.borderColor = '#2563eb'}
+                        onBlur={e => e.target.style.borderColor = '#ccc'}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <button 
+                  disabled={otpValues.join('').length !== 4}
+                  onClick={() => {
+                    setShowLoginModal(false);
+                    setOtpSent(false);
+                    setPhoneNumber('');
+                    setOtpValues(['', '', '', '']);
+                  }}
+                  style={{
+                    width: '100%', padding: '14px', borderRadius: '8px', border: 'none', fontSize: '16px', fontWeight: '600',
+                    background: otpValues.join('').length === 4 ? '#10b981' : '#cbd5e1', 
+                    color: 'white', cursor: otpValues.join('').length === 4 ? 'pointer' : 'not-allowed',
+                    transition: 'background 0.3s'
+                  }}
+                >
+                  Submit
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

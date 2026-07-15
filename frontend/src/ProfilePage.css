@@ -1,0 +1,272 @@
+.profile-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.profile-header h1 {
+  font-size: 32px;
+  color: #1a1a1a;
+  margin: 0 0 30px;
+  font-weight: 700;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 40px;
+}
+
+.profile-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 30px 20px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  border: 1px solid #f0f0f0;
+  margin-bottom: 20px;
+}
+
+.profile-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+  border: 4px solid #f8fafc;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.user-info-card h2 {
+  margin: 0 0 5px;
+  color: #111;
+  font-size: 22px;
+}
+
+.profile-email {
+  color: #666;
+  margin: 0 0 15px;
+  font-size: 14px;
+}
+
+.profile-badge {
+  background: #eff6ff;
+  color: #2563eb;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.profile-nav {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  border: 1px solid #f0f0f0;
+  overflow: hidden;
+}
+
+.profile-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.profile-nav li {
+  padding: 18px 25px;
+  color: #555;
+  cursor: pointer;
+  border-bottom: 1px solid #f8fafc;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.profile-nav li:last-child {
+  border-bottom: none;
+}
+
+.profile-nav li:hover {
+  background: #f8fafc;
+  color: #2563eb;
+}
+
+.profile-nav li.active {
+  background: #eff6ff;
+  color: #2563eb;
+  border-left: 4px solid #2563eb;
+}
+
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.profile-section {
+  background: #fff;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  border: 1px solid #f0f0f0;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 15px;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #222;
+}
+
+.edit-btn {
+  background: none;
+  border: none;
+  color: #2563eb;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.edit-btn:hover {
+  text-decoration: underline;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+
+.info-item label {
+  display: block;
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-item p {
+  margin: 0;
+  font-size: 16px;
+  color: #111;
+  font-weight: 500;
+}
+
+.address-card, .payment-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 20px;
+  background: #f8fafc;
+}
+
+.address-card p {
+  margin: 5px 0;
+  color: #555;
+  font-size: 15px;
+}
+
+.payment-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.card-icon {
+  font-size: 32px;
+}
+
+.card-details p {
+  margin: 2px 0;
+  color: #444;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.order-id {
+  font-weight: 600;
+  color: #222;
+  margin: 0 0 5px;
+}
+
+.order-date {
+  color: #888;
+  font-size: 13px;
+  margin: 0;
+}
+
+.order-status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.order-status.processing {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.order-price {
+  font-weight: 700;
+  font-size: 18px;
+  color: #111;
+}
+
+.support-section {
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+}
+
+.raise-issue-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: background 0.3s;
+}
+
+.raise-issue-btn:hover {
+  background: #dc2626;
+}
+
+@media (max-width: 900px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+  .order-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+}
