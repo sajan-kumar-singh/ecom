@@ -80,7 +80,15 @@ const CartPage = ({ cart, setCart }) => {
               <span>Total</span>
               <span>${total.toFixed(2)}</span>
             </div>
-            <button className="checkout-btn">Proceed to Checkout</button>
+            <button 
+              className="checkout-btn"
+              onClick={() => {
+                window.history.pushState({}, '', '/checkout');
+                window.dispatchEvent(new PopStateEvent('popstate'));
+              }}
+            >
+              Proceed to Checkout
+            </button>
           </div>
         </div>
       )}

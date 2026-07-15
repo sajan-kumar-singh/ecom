@@ -136,7 +136,13 @@ const OrderPage = ({ product, onAddToCart }) => {
             <button className="wishlist-btn">♡</button>
           </div>
 
-          <button className="purchase-instantly-btn">
+          <button 
+            className="purchase-instantly-btn"
+            onClick={() => {
+              window.history.pushState({}, '', '/checkout');
+              window.dispatchEvent(new PopStateEvent('popstate'));
+            }}
+          >
             ⚡ Purchase Instantly
           </button>
 

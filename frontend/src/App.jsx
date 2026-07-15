@@ -16,6 +16,7 @@ import CartPage from './CartPage'
 import ProfilePage from './ProfilePage'
 import PromoCards from './PromoCards'
 import WidePromoBanner from './WidePromoBanner'
+import PaymentPage from './PaymentPage'
 
 const products = [
   {
@@ -126,6 +127,7 @@ function App() {
   ])
   const [isCartPage, setIsCartPage] = useState(false)
   const [isProfilePage, setIsProfilePage] = useState(false)
+  const [isCheckoutPage, setIsCheckoutPage] = useState(false)
 
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -159,14 +161,22 @@ function App() {
       if (path === '/cart') {
         setIsCartPage(true);
         setIsProfilePage(false);
+        setIsCheckoutPage(false);
         setSelectedProduct(null);
       } else if (path === '/profile') {
         setIsCartPage(false);
         setIsProfilePage(true);
+        setIsCheckoutPage(false);
+        setSelectedProduct(null);
+      } else if (path === '/checkout') {
+        setIsCartPage(false);
+        setIsProfilePage(false);
+        setIsCheckoutPage(true);
         setSelectedProduct(null);
       } else {
         setIsCartPage(false);
         setIsProfilePage(false);
+        setIsCheckoutPage(false);
         const match = path.match(/^\/order\/(.+)$/);
         if (match) {
           const id = match[1];
@@ -197,7 +207,7 @@ function App() {
   };
 
   useEffect(() => {
-    if (selectedProduct || isCartPage || isProfilePage) return;
+    if (selectedProduct || isCartPage || isProfilePage || isCheckoutPage) return;
 
     const interval = setInterval(() => {
       setCurrentProductIndex((prev) => (prev + 1) % products.length);
@@ -297,7 +307,9 @@ function App() {
 
       {/* Main Content Area */}
       <main style={{ flex: 1, width: '100%', paddingTop: '80px', display: 'flex', flexDirection: 'column' }}>
-        {isCartPage ? (
+        {isCheckoutPage ? (
+          <PaymentPage />
+        ) : isCartPage ? (
           <CartPage cart={cart} setCart={setCart} />
         ) : isProfilePage ? (
           <ProfilePage />
