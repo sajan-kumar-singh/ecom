@@ -144,62 +144,132 @@ function App() {
     return () => clearInterval(interval);
   }, [selectedProduct]);
 
-  if (selectedProduct) {
-    return (
-      <OrderPage product={selectedProduct} />
-    )
-  }
-
   return (
-    <div className="App" style={{ width: '100%', margin: 0, padding: 0, overflowX: 'hidden', display: 'flex', flexDirection: 'column' }}>
+    <div className="App" style={{ width: '100%', margin: 0, padding: 0, overflowX: 'hidden', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
 
-      {/* Welcome Title */}
-      <div style={{ width: '100%', padding: '20px 20px 10px', boxSizing: 'border-box' }}>
-        <h1 style={{ margin: 0, fontSize: '28px', color: '#333', textAlign: 'left' }}>Welcome!</h1>
-      </div>
-
-      {/* Slideshow */}
-      <div style={{ position: 'relative', width: '100%', height: '500px', overflow: 'hidden' }}>
-        <div style={{
-          display: 'flex',
-          width: `${products.length * 100}%`,
-          height: '100%',
-          transform: `translateX(-${(currentProductIndex * 100) / products.length}%)`,
-          transition: 'transform 0.5s ease-in-out'
-        }}>
-          {products.map((product, idx) => (
-            <img
-              key={idx}
-              src={product.main_image}
-              alt={product.product_name}
-              onClick={() => {
-                window.history.pushState({}, '', `/order/${product.id}`);
-                const navEvent = new PopStateEvent('popstate');
-                window.dispatchEvent(navEvent);
-              }}
-              style={{ width: `${100 / products.length}%`, height: '100%', objectFit: 'cover', cursor: 'pointer' }}
-            />
-          ))}
+      {/* Fixed Header */}
+      <header style={{ 
+        width: '100%', 
+        padding: '15px 20px', 
+        boxSizing: 'border-box', 
+        position: 'fixed', 
+        top: 0, 
+        left: 0, 
+        zIndex: 1000, 
+        backgroundColor: 'rgba(255, 255, 255, 0.95)', 
+        backdropFilter: 'blur(8px)',
+        borderBottom: '1px solid #eaeaea',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      }}>
+        <h1 
+          style={{ margin: 0, fontSize: '28px', color: '#333', textAlign: 'left', cursor: 'pointer', fontWeight: 'bold', letterSpacing: '-0.5px' }}
+          onClick={() => {
+            window.history.pushState({}, '', '/');
+            const navEvent = new PopStateEvent('popstate');
+            window.dispatchEvent(navEvent);
+          }}
+          title="Go to Home"
+        >
+          Welcome!
+        </h1>
+        <div style={{ display: 'flex', gap: '15px' }}>
+          <span style={{ cursor: 'pointer', fontSize: '18px' }} title="Cart">🛒</span>
+          <span style={{ cursor: 'pointer', fontSize: '18px' }} title="Profile">👤</span>
         </div>
-      </div>
+      </header>
 
-      {/* Navigation Dots Below Slideshow */}
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', padding: '20px 0', width: '100%' }}>
-        {products.map((_, idx) => (
-          <div
-            key={idx}
-            onClick={() => setCurrentProductIndex(idx)}
-            style={{
-              width: '12px',
-              height: '12px',
-              borderRadius: '50%',
-              backgroundColor: currentProductIndex === idx ? '#333' : '#ccc',
-              cursor: 'pointer',
-              transition: 'background-color 0.3s'
-            }}
-          />
-        ))}
-      </div>
+      {/* Main Content Area */}
+      <main style={{ flex: 1, width: '100%', paddingTop: '80px', display: 'flex', flexDirection: 'column' }}>
+        {selectedProduct ? (
+          <OrderPage product={selectedProduct} />
+        ) : (
+          <>
+            {/* Slideshow */}
+            <div style={{ position: 'relative', width: '100%', height: '500px', overflow: 'hidden' }}>
+              <div style={{
+                display: 'flex',
+                width: `${products.length * 100}%`,
+                height: '100%',
+                transform: `translateX(-${(currentProductIndex * 100) / products.length}%)`,
+                transition: 'transform 0.5s ease-in-out'
+              }}>
+                {products.map((product, idx) => (
+                  <img
+                    key={idx}
+                    src={product.main_image}
+                    alt={product.product_name}
+                    onClick={() => {
+                      window.history.pushState({}, '', `/order/${product.id}`);
+                      const navEvent = new PopStateEvent('popstate');
+                      window.dispatchEvent(navEvent);
+                    }}
+                    style={{ width: `${100 / products.length}%`, height: '100%', objectFit: 'cover', cursor: 'pointer' }}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Navigation Dots Below Slideshow */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', padding: '20px 0', width: '100%' }}>
+              {products.map((_, idx) => (
+                <div
+                  key={idx}
+                  onClick={() => setCurrentProductIndex(idx)}
+                  style={{
+                    width: '12px',
+                    height: '12px',
+                    borderRadius: '50%',
+                    backgroundColor: currentProductIndex === idx ? '#333' : '#ccc',
+                    cursor: 'pointer',
+                    transition: 'background-color 0.3s'
+                  }}
+                />
+              ))}
+            </div>
+          </>
+        )}
+      </main>
+
+      {/* Footer */}
+      <footer style={{ 
+        width: '100%', 
+        padding: '30px 20px', 
+        backgroundColor: '#111', 
+        color: '#f4f4f4', 
+        textAlign: 'center', 
+        boxSizing: 'border-box',
+        marginTop: 'auto',
+        borderTop: '3px solid #333'
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', maxWidth: '1000px', margin: '0 auto 20px', textAlign: 'left' }}>
+          <div style={{ minWidth: '200px', marginBottom: '20px' }}>
+            <h3 style={{ fontSize: '18px', marginBottom: '10px', color: '#fff' }}>About Us</h3>
+            <p style={{ fontSize: '14px', color: '#aaa', lineHeight: '1.6', margin: 0 }}>We provide the best curated art pieces and motivational posters to inspire your daily life.</p>
+          </div>
+          <div style={{ minWidth: '200px', marginBottom: '20px' }}>
+            <h3 style={{ fontSize: '18px', marginBottom: '10px', color: '#fff' }}>Customer Service</h3>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '14px', color: '#aaa', lineHeight: '1.8' }}>
+              <li style={{ cursor: 'pointer' }}>Contact Us</li>
+              <li style={{ cursor: 'pointer' }}>Shipping & Returns</li>
+              <li style={{ cursor: 'pointer' }}>FAQ</li>
+            </ul>
+          </div>
+          <div style={{ minWidth: '200px', marginBottom: '20px' }}>
+            <h3 style={{ fontSize: '18px', marginBottom: '10px', color: '#fff' }}>Follow Us</h3>
+            <div style={{ display: 'flex', gap: '15px', fontSize: '20px' }}>
+              <span style={{ cursor: 'pointer' }}>📘</span>
+              <span style={{ cursor: 'pointer' }}>🐦</span>
+              <span style={{ cursor: 'pointer' }}>📸</span>
+            </div>
+          </div>
+        </div>
+        <div style={{ borderTop: '1px solid #333', paddingTop: '20px', fontSize: '14px', color: '#777' }}>
+          &copy; {new Date().getFullYear()} Welcome Store. All rights reserved.
+        </div>
+      </footer>
 
     </div>
   )
