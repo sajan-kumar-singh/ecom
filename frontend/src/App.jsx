@@ -14,6 +14,8 @@ import img9 from './assets/deadpool_2_movie_funny-wallpaper-1920x1080.jpg'
 import OrderPage from './OrderPage'
 import CartPage from './CartPage'
 import ProfilePage from './ProfilePage'
+import PromoCards from './PromoCards'
+import WidePromoBanner from './WidePromoBanner'
 
 const products = [
   {
@@ -345,6 +347,9 @@ function App() {
                 />
               ))}
             </div>
+            
+            <PromoCards />
+            <WidePromoBanner />
           </>
         )}
       </main>

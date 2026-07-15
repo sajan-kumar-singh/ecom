@@ -1,0 +1,73 @@
+.wide-promo-container {
+  background: white;
+  padding: 20px;
+  margin: 0 auto 20px;
+  max-width: 1400px;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border: 1px solid #eaeaea;
+}
+
+.wide-promo-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.wide-promo-header h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f1111;
+  margin: 0;
+}
+
+.wide-promo-link {
+  color: #007185;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.wide-promo-link:hover {
+  color: #c45500;
+  text-decoration: underline;
+}
+
+.wide-promo-scroll-area {
+  display: flex;
+  overflow-x: auto;
+  gap: 15px;
+  padding-bottom: 10px;
+}
+
+.wide-promo-scroll-area::-webkit-scrollbar {
+  height: 8px;
+}
+
+.wide-promo-scroll-area::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.wide-promo-scroll-area::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.wide-promo-scroll-area::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+.wide-promo-item {
+  flex: 0 0 calc(100% / 7 - 15px);
+  min-width: 150px;
+}
+
+.wide-promo-item img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 4px;
+}
