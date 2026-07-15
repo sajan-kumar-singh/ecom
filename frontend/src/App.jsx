@@ -12,6 +12,7 @@ import img8 from './assets/941835.jpg'
 import img9 from './assets/deadpool_2_movie_funny-wallpaper-1920x1080.jpg'
 
 import OrderPage from './OrderPage'
+import CartPage from './CartPage'
 
 const products = [
   {
@@ -115,16 +116,29 @@ const products = [
 function App() {
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [currentProductIndex, setCurrentProductIndex] = useState(0)
+  const [cart, setCart] = useState([
+    { product: products[0], quantity: 1 },
+    { product: products[2], quantity: 2 },
+    { product: products[4], quantity: 1 }
+  ])
+  const [isCartPage, setIsCartPage] = useState(false)
 
   useEffect(() => {
     const handlePopState = () => {
-      const match = window.location.pathname.match(/^\/order\/(.+)$/);
-      if (match) {
-        const id = match[1];
-        const p = products.find(p => p.id === id);
-        setSelectedProduct(p || null);
-      } else {
+      const path = window.location.pathname;
+      if (path === '/cart') {
+        setIsCartPage(true);
         setSelectedProduct(null);
+      } else {
+        setIsCartPage(false);
+        const match = path.match(/^\/order\/(.+)$/);
+        if (match) {
+          const id = match[1];
+          const p = products.find(p => p.id === id);
+          setSelectedProduct(p || null);
+        } else {
+          setSelectedProduct(null);
+        }
       }
     };
 
@@ -134,8 +148,20 @@ function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
+  const handleAddToCart = (product, quantity) => {
+    setCart(prev => {
+      const existing = prev.find(item => item.product.id === product.id);
+      if (existing) {
+        return prev.map(item => item.product.id === product.id ? { ...item, quantity: item.quantity + quantity } : item);
+      }
+      return [...prev, { product, quantity }];
+    });
+    window.history.pushState({}, '', '/cart');
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  };
+
   useEffect(() => {
-    if (selectedProduct) return;
+    if (selectedProduct || isCartPage) return;
 
     const interval = setInterval(() => {
       setCurrentProductIndex((prev) => (prev + 1) % products.length);
@@ -175,16 +201,31 @@ function App() {
         >
           Welcome!
         </h1>
-        <div style={{ display: 'flex', gap: '15px' }}>
-          <span style={{ cursor: 'pointer', fontSize: '18px' }} title="Cart">🛒</span>
-          <span style={{ cursor: 'pointer', fontSize: '18px' }} title="Profile">👤</span>
+        <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+          <div style={{ position: 'relative', cursor: 'pointer', fontSize: '20px' }} title="Cart" onClick={() => {
+            window.history.pushState({}, '', '/cart');
+            window.dispatchEvent(new PopStateEvent('popstate'));
+          }}>
+            🛒
+            {cart.length > 0 && (
+              <span style={{
+                position: 'absolute', top: '-8px', right: '-12px', background: '#ef4444', color: 'white', 
+                borderRadius: '50%', padding: '2px 6px', fontSize: '12px', fontWeight: 'bold'
+              }}>
+                {cart.reduce((acc, item) => acc + item.quantity, 0)}
+              </span>
+            )}
+          </div>
+          <span style={{ cursor: 'pointer', fontSize: '20px' }} title="Profile">👤</span>
         </div>
       </header>
 
       {/* Main Content Area */}
       <main style={{ flex: 1, width: '100%', paddingTop: '80px', display: 'flex', flexDirection: 'column' }}>
-        {selectedProduct ? (
-          <OrderPage product={selectedProduct} />
+        {isCartPage ? (
+          <CartPage cart={cart} setCart={setCart} />
+        ) : selectedProduct ? (
+          <OrderPage product={selectedProduct} onAddToCart={handleAddToCart} />
         ) : (
           <>
             {/* Slideshow */}

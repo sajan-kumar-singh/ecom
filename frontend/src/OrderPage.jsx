@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './OrderPage.css';
 
-const OrderPage = ({ product }) => {
+const OrderPage = ({ product, onAddToCart }) => {
   const [quantity, setQuantity] = useState(1);
   const [selectedColor, setSelectedColor] = useState(
     product && product.color && product.color.length > 0 ? product.color[0].hex : null
@@ -130,7 +130,7 @@ const OrderPage = ({ product }) => {
               <span>{quantity}</span>
               <button onClick={() => setQuantity(quantity + 1)}>+</button>
             </div>
-            <button className="add-to-cart-btn">
+            <button className="add-to-cart-btn" onClick={() => onAddToCart && onAddToCart(product, quantity)}>
               Add to Cart
             </button>
             <button className="wishlist-btn">♡</button>
